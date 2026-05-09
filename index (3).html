@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>MLBB 5-Lane Build • Satu Hero • Semua Role</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0b0e14;
+            color: #eef2fb;
+            padding: 12px 10px 30px;
+        }
+
+        .wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .badge-update {
+            background: #1e2a3a;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #aaccff;
+            border-left: 3px solid #a855f7;
+            margin-left: auto;
+        }
+
+        .filter-panel {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 16px;
+            margin-bottom: 20px;
+            background: #151e28;
+            padding: 12px 16px;
+            border-radius: 48px;
+            border: 1px solid #2a3748;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 230px;
+            display: flex;
+            align-items: center;
+            background: #0f161f;
+            border-radius: 40px;
+            padding: 4px 6px 4px 18px;
+            border: 1px solid #3a4a5e;
+        }
+        .search-box i {
+            color: #9bb5d4;
+            font-size: 1rem;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            padding: 12px 10px;
+            font-size: 1rem;
+            color: #f0f6ff;
+            width: 100%;
+            outline: none;
+        }
+        .search-box input::placeholder {
+            color: #7c8fa3;
+        }
+        .search-box button {
+            background: #2e4b6a;
+            border: none;
+            color: white;
+            border-radius: 40px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #5f8ab6;
+            font-size: 0.9rem;
+        }
+        .search-box button:hover {
+            background: #3f6791;
+        }
+
+        .lane-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            flex: 3;
+        }
+        .lane-btn {
+            background: #1f2c3a;
+            border: 1px solid #314a60;
+            color: #cbd8e8;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .lane-btn.active {
+            background: #a855f7;
+            border-color: #a855f7;
+            color: white;
+            box-shadow: 0 0 10px #a855f755;
+        }
+        .lane-btn:hover {
+            background: #314a60;
+            color: white;
+        }
+        .reset-btn {
+            background: #2c3e50;
+            border: 1px solid #5d7a99;
+            margin-left: auto;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #b0c7df;
+        }
+
+        .table-container {
+            background: #111a24;
+            border-radius: 24px;
+            padding: 4px 2px 8px 2px;
+            border: 1px solid #2d4055;
+            overflow-x: auto;
+            box-shadow: 0 20px 30px -8px black;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+            font-size: 0.85rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px 10px;
+            background: #1a2938;
+            color: #e1eefa;
+            font-weight: 600;
+            border-bottom: 2px solid #3f6180;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 10px;
+            border-bottom: 1px solid #1f3142;
+            vertical-align: top;
+            background: #0f1a26;
+        }
+
+        tr:hover td {
+            background: #162533;
+        }
+
+        .hero-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+        .hero-icon {
+            width: 34px;
+            height: 34px;
+            background: #1d3043;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c084fc;
+            font-size: 1.1rem;
+            border: 1.5px solid #a855f7;
+        }
+
+        .role-tag {
+            display: inline-block;
+            background: #283b50;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #bed9ff;
+            text-transform: uppercase;
+        }
+
+        .lane-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .item-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 6px;
+            max-width: 300px;
+        }
+        .item-badge {
+            background: #1d3e3a;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #b0ecd0;
+            border-left: 2px solid #10b981;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .emblem-cell {
+            max-width: 220px;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        .emblem-main {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .footer-note {
+            margin-top: 24px;
+            text-align: right;
+            color: #7b95af;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header">
+        <h1><i class="fas fa-arrows-alt" style="margin-right: 10px;"></i>5‑LANE BUILDER · SATU HERO</h1>
+        <span class="badge-update"><i class="far fa-calendar-alt"></i> Update Meta Mei 2026 · Hero Specific Build</span>
+    </div>
+
+    <div class="filter-panel">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Cari hero... (contoh: Kagura, Ling)" autocomplete="off">
+            <button id="searchBtn"><i class="fas fa-filter"></i> Cari</button>
+        </div>
+        <div class="lane-filters" id="laneFilterContainer">
+            <button class="lane-btn active" data-lane="all"><i class="fas fa-users"></i> Semua Lane</button>
+            <button class="lane-btn" data-lane="EXP"><i class="fas fa-shield-halved"></i> EXP</button>
+            <button class="lane-btn" data-lane="Jungle"><i class="fas fa-tree"></i> Jungle</button>
+            <button class="lane-btn" data-lane="Mid"><i class="fas fa-hat-wizard"></i> Mid</button>
+            <button class="lane-btn" data-lane="Gold"><i class="fas fa-coins"></i> Gold</button>
+            <button class="lane-btn" data-lane="Roam"><i class="fas fa-route"></i> Roam</button>
+            <button class="lane-btn reset-btn" id="resetBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+        </div>
+    </div>
+
+    <div class="stats-bar">
+        <span id="resultCount">Menampilkan build</span>
+        <span><i class="fas fa-info-circle"></i> 1 Hero = 5 Build (EXP · Jungle · Mid · Gold · Roam)</span>
+    </div>
+
+    <div class="table-container">
+        <table id="heroTable">
+            <thead>
+                <tr>
+                    <th>Hero</th>
+                    <th>Role</th>
+                    <th>Lane</th>
+                    <th>Item Build (6 Item)</th>
+                    <th>Emblem & Talent</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <div class="footer-note">
+        ⚡ Build eksperimental untuk semua lane · Meta Season 40 2026
+    </div>
+</div>
+
+<script>
+    (function(){
+        "use strict";
+
+        // ---------- DATA: setiap hero punya 5 lane dengan build & emblem ----------
+        const heroes = [
+            "Tigreal","Atlas","Franco","Johnson","Khufra","Grock","Belerick","Hylos","Uranus","Gloo",
+            "Edith","Barats","Baxia","Akai","Gatotkaca","Minotaur","Lolita","Fredrinn","Chip",
+            "Chou","Yu Zhong","Paquito","Thamuz","X.Borg","Dyrroth","Argus","Alucard","Sun","Zilong",
+            "Guinevere","Jawhead","Ruby","Masha","Aldous","Martis","Terizla","Lapu-Lapu","Balmond",
+            "Bane","Badang","Aulus","Yin","Minsitthar","Phoveus","Arlott","Cici","Suyou","Lukas",
+            "Kalea","Freya","Hilda","Khaleed","Silvanna","Leomord","Alpha","Julian",
+            "Ling","Lancelot","Gusion","Hayabusa","Fanny","Saber","Karina","Natalia","Helcurt","Selena",
+            "Benedetta","Aamon","Joy","Nolan","Hanzo","Kadita","Yi Sun-shin",
+            "Kagura","Eudora","Nana","Pharsa","Yve","Lunox","Harith","Esmeralda","Vale","Valir",
+            "Gord","Aurora","Odette","Cecilion","Luo Yi","Xavier","Valentina","Lylia","Chang'e","Vexana",
+            "Faramis","Harley","Cyclops","Zhask","Kimmy","Alice","Novaria","Zhuxin","Obsidia","Zetian",
+            "Layla","Miya","Lesley","Wanwan","Beatrix","Brody","Claude","Granger","Moskov","Karrie",
+            "Irithel","Popol and Kupa","Natan","Melissa","Ixia","Clint","Bruno","Hanabi","Roger",
+            "Angela","Rafaela","Estes","Diggie","Mathilda","Floryn","Carmilla","Kaja","Marcel","Sora"
+        ];
+
+        // Fungsi untuk generate build per lane berdasarkan role dominan (logika sederhana tapi masuk akal)
+        
+function generateBuild(hero, role) {
+    const builds = { EXP: [], Jungle: [], Mid: [], Gold: [], Roam: [] };
+    const emblems = { EXP: '', Jungle: '', Mid: '', Gold: '', Roam: '' };
+
+    const physicalMm = new Set(["Layla","Miya","Lesley","Wanwan","Beatrix","Brody","Claude","Granger","Moskov","Karrie","Irithel","Popol and Kupa","Natan","Melissa","Ixia","Clint","Bruno","Hanabi","Roger","Edith"]);
+    const physicalBurst = new Set(["Saber","Gusion","Lancelot","Hayabusa","Fanny","Natalia","Helcurt","Benedetta","Aamon","Nolan","Karina","Ling","Hanzo","Joy"]);
+    const magicSkill = new Set(["Kagura","Eudora","Nana","Pharsa","Yve","Lunox","Harith","Vale","Valir","Gord","Aurora","Odette","Cecilion","Luo Yi","Xavier","Valentina","Lylia","Chang'e","Vexana","Faramis","Harley","Cyclops","Zhask","Alice","Novaria","Zhuxin","Obsidia","Zetian","Kadita","Selena","Kimmy","Julian","Esmeralda"]);
+    const tankHeroes = new Set(["Tigreal","Atlas","Franco","Johnson","Khufra","Grock","Belerick","Hylos","Uranus","Gloo","Edith","Barats","Baxia","Akai","Gatotkaca","Minotaur","Lolita","Fredrinn","Chip"]);
+    const supportHeroes = new Set(["Angela","Rafaela","Estes","Diggie","Mathilda","Floryn","Carmilla","Kaja","Marcel","Sora"]);
+
+    const isMage = role.includes("Mage") || magicSkill.has(hero);
+    const isSupport = !isMage && (role.includes("Support") || supportHeroes.has(hero));
+    const isTank = !isMage && !isSupport && (role.includes("Tank") || tankHeroes.has(hero));
+    const isMarksman = !isMage && !isSupport && !isTank && (role.includes("Marksman") || physicalMm.has(hero));
+    const isAssassin = !isMage && !isSupport && !isTank && !isMarksman && (role.includes("Assassin") || physicalBurst.has(hero));
+    const isPhysicalFighter = !isMage && !isSupport && !isTank && !isMarksman && !isAssassin;
+
+    if (isMage) {
+        const midMage = ["Arcane Boots","Enchanted Talisman","Genius Wand","Holy Crystal","Divine Glaive","Blood Wings"];
+        const burstMage = ["Magic Shoes","Lightning Truncheon","Holy Crystal","Divine Glaive","Blood Wings","Winter Truncheon"];
+        const sustainMage = ["Magic Shoes","Enchanted Talisman","Clock of Destiny","Oracle","Holy Crystal","Blood Wings"];
+        const roamMage = ["Magic Shoes","Enchanted Talisman","Oracle","Athena's Shield","Radiant Armor","Immortality"];
+
+        builds.Mid = midMage;
+        builds.EXP = sustainMage;
+        builds.Gold = ["Magic Shoes","Feather of Heaven","Genius Wand","Holy Crystal","Divine Glaive","Blood Wings"];
+        builds.Jungle = ["Arcane Boots","Enchanted Talisman","Genius Wand","Holy Crystal","Divine Glaive","Winter Truncheon"];
+        builds.Roam = roamMage;
+
+        emblems.Mid = "Mage (Rupture, Bargain Hunter, Impure Rage)";
+        emblems.EXP = "Mage (Rupture, Bargain Hunter, Impure Rage)";
+        emblems.Gold = "Mage (Rupture, Bargain Hunter, Impure Rage)";
+        emblems.Jungle = "Mage (Rupture, Bargain Hunter, Impure Rage)";
+        emblems.Roam = "Support (Agility, Bargain Hunter, Focusing Mark)";
+    } else if (isSupport) {
+        const supportCore = ["Magic Shoes","Enchanted Talisman","Oracle","Athena's Shield","Radiant Armor","Immortality"];
+        const supportRoam = ["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Radiant Armor","Immortality"];
+        const supportAggro = ["Magic Shoes","Enchanted Talisman","Ice Queen Wand","Oracle","Divine Glaive","Immortality"];
+
+        builds.EXP = supportAggro;
+        builds.Jungle = supportCore;
+        builds.Mid = supportAggro;
+        builds.Gold = supportAggro;
+        builds.Roam = supportRoam;
+
+        emblems.EXP = "Support (Agility, Bargain Hunter, Focusing Mark)";
+        emblems.Jungle = "Tank (Vitality, Tenacity, Concussive Blast)";
+        emblems.Mid = "Support (Agility, Bargain Hunter, Focusing Mark)";
+        emblems.Gold = "Support (Agility, Bargain Hunter, Focusing Mark)";
+        emblems.Roam = "Support (Agility, Bargain Hunter, Focusing Mark)";
+    } else if (isTank) {
+        const tankCore = ["Tough Boots","Dominance Ice","Athena's Shield","Radiant Armor","Antique Cuirass","Immortality"];
+        const tankExp = ["Tough Boots","Cursed Helmet","Dominance Ice","Oracle","Antique Cuirass","Immortality"];
+        const tankJungle = ["Tough Boots","Cursed Helmet","Dominance Ice","Oracle","Radiant Armor","Immortality"];
+        const tankGold = ["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Antique Cuirass","Immortality"];
+
+        builds.EXP = tankExp;
+        builds.Jungle = tankJungle;
+        builds.Mid = tankCore;
+        builds.Gold = tankGold;
+        builds.Roam = tankCore;
+
+        emblems.EXP = "Tank (Vitality, Tenacity, Concussive Blast)";
+        emblems.Jungle = "Tank (Vitality, Tenacity, Concussive Blast)";
+        emblems.Mid = "Tank (Vitality, Tenacity, Concussive Blast)";
+        emblems.Gold = "Tank (Vitality, Tenacity, Concussive Blast)";
+        emblems.Roam = "Tank (Vitality, Tenacity, Concussive Blast)";
+    } else if (isMarksman) {
+        const atkSpeed = physicalMm.has(hero) && !["Lesley","Brody","Beatrix","Clint","Bruno"].includes(hero);
+        const mmAttack = ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Malefic Roar","Wind of Nature"];
+        const mmCrit = ["Swift Boots","Berserker's Fury","Windtalker","Malefic Roar","Blade of Despair","Wind of Nature"];
+        const mmSkill = ["Swift Boots","Endless Battle","Blade of the Heptaseas","Berserker's Fury","Malefic Roar","Immortality"];
+        const mmRoam = ["Tough Boots","Dominance Ice","Antique Cuirass","Blade of Despair","Malefic Roar","Immortality"];
+
+        const chosenGold = ["Claude","Wanwan","Miya","Moskov","Karrie","Irithel","Melissa","Hanabi","Popol and Kupa","Natan","Ixia","Edith"].includes(hero) ? mmAttack
+            : ["Lesley","Brody","Beatrix","Clint","Bruno","Granger"].includes(hero) ? mmCrit
+            : mmSkill;
+
+        builds.EXP = mmSkill;
+        builds.Jungle = ["Tough Boots","Hunter Strike","Blade of the Heptaseas","Malefic Roar","Blade of Despair","Immortality"];
+        builds.Mid = mmSkill;
+        builds.Gold = chosenGold;
+        builds.Roam = mmRoam;
+
+        emblems.EXP = "Marksman (Swift, Weapon Master, Quantum Charge)";
+        emblems.Jungle = "Assassin (Rupture, Master Assassin, Killing Spree)";
+        emblems.Mid = "Marksman (Swift, Weapon Master, Quantum Charge)";
+        emblems.Gold = "Marksman (Swift, Weapon Master, Quantum Charge)";
+        emblems.Roam = "Tank (Vitality, Tenacity, Concussive Blast)";
+    } else if (isAssassin) {
+        const burst = ["Tough Boots","Blade of the Heptaseas","Hunter Strike","Malefic Roar","Blade of Despair","Immortality"];
+        const burstJungle = ["Tough Boots","Hunter Strike","Blade of the Heptaseas","Malefic Roar","Blade of Despair","Immortality"];
+        const burstRoam = ["Tough Boots","Blade of the Heptaseas","Hunter Strike","Dominance Ice","Antique Cuirass","Immortality"];
+
+        builds.EXP = burst;
+        builds.Jungle = burstJungle;
+        builds.Mid = burst;
+        builds.Gold = burst;
+        builds.Roam = burstRoam;
+
+        emblems.EXP = "Assassin (Rupture, Master Assassin, Lethal Ignition)";
+        emblems.Jungle = "Assassin (Rupture, Master Assassin, Lethal Ignition)";
+        emblems.Mid = "Assassin (Rupture, Master Assassin, Lethal Ignition)";
+        emblems.Gold = "Assassin (Rupture, Master Assassin, Lethal Ignition)";
+        emblems.Roam = "Assassin (Rupture, Master Assassin, Lethal Ignition)";
+    } else if (isPhysicalFighter) {
+        const bruiserExp = ["Tough Boots","War Axe","Bloodlust Axe","Hunter Strike","Brute Force Breastplate","Immortality"];
+        const bruiserJungle = ["Tough Boots","War Axe","Hunter Strike","Blade of the Heptaseas","Malefic Roar","Immortality"];
+        const bruiserMid = ["Warrior Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"];
+        const bruiserGold = ["Swift Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"];
+        const bruiserRoam = ["Tough Boots","Dominance Ice","Oracle","Antique Cuirass","Brute Force Breastplate","Immortality"];
+
+        builds.EXP = bruiserExp;
+        builds.Jungle = bruiserJungle;
+        builds.Mid = bruiserMid;
+        builds.Gold = bruiserGold;
+        builds.Roam = bruiserRoam;
+
+        emblems.EXP = "Fighter (Bravery, Festival of Blood, Brave Smite)";
+        emblems.Jungle = "Fighter (Bravery, Seasoned Hunter, Brave Smite)";
+        emblems.Mid = "Fighter (Bravery, Weapon Master, Lethal Ignition)";
+        emblems.Gold = "Fighter (Bravery, Weapon Master, Lethal Ignition)";
+        emblems.Roam = "Tank (Vitality, Tenacity, Concussive Blast)";
+    }
+
+    // fallback safety: semua item yang muncul tetap mengikuti tipe hero
+    Object.keys(builds).forEach(lane => {
+        if (!Array.isArray(builds[lane]) || builds[lane].length === 0) {
+            builds[lane] = ["Tough Boots","War Axe","Hunter Strike","Malefic Roar","Immortality","Brute Force Breastplate"];
+            emblems[lane] = "Fighter (Bravery, Weapon Master, Brave Smite)";
+        }
+    });
+
+    // hero-specific override (untuk hero yang memang butuh build khusus)
+    if (typeof heroSpecificBuilds !== "undefined" && heroSpecificBuilds[hero]) {
+        Object.keys(heroSpecificBuilds[hero]).forEach(lane => {
+            const cfg = heroSpecificBuilds[hero][lane];
+            if (cfg && cfg.items) builds[lane] = cfg.items;
+            if (cfg && cfg.emblem) emblems[lane] = cfg.emblem;
+        });
+    }
+
+    return { builds, emblems };
+}
+
+// Mapping role untuk setiap hero (diperlukan untuk generate)
+        const roleMap = {
+            // Tank
+            "Tigreal":"Tank","Atlas":"Tank","Franco":"Tank","Johnson":"Tank","Khufra":"Tank","Grock":"Tank","Belerick":"Tank",
+            "Hylos":"Tank","Uranus":"Tank","Gloo":"Tank","Edith":"Tank/Marksman","Barats":"Tank/Fighter","Baxia":"Tank",
+            "Akai":"Tank","Gatotkaca":"Tank/Fighter","Minotaur":"Tank/Support","Lolita":"Tank/Support","Fredrinn":"Tank/Fighter",
+            "Chip":"Tank/Support",
+            // Fighter
+            "Chou":"Fighter","Yu Zhong":"Fighter","Paquito":"Fighter","Thamuz":"Fighter","X.Borg":"Fighter","Dyrroth":"Fighter",
+            "Argus":"Fighter","Alucard":"Fighter/Assassin","Sun":"Fighter","Zilong":"Fighter/Assassin","Guinevere":"Fighter",
+            "Jawhead":"Fighter","Ruby":"Fighter","Masha":"Fighter","Aldous":"Fighter","Martis":"Fighter","Terizla":"Fighter",
+            "Lapu-Lapu":"Fighter","Balmond":"Fighter","Bane":"Fighter","Badang":"Fighter","Aulus":"Fighter","Yin":"Fighter/Assassin",
+            "Minsitthar":"Fighter","Phoveus":"Fighter","Arlott":"Fighter","Cici":"Fighter","Suyou":"Fighter","Lukas":"Fighter",
+            "Kalea":"Fighter","Freya":"Fighter","Hilda":"Fighter","Khaleed":"Fighter","Silvanna":"Fighter","Leomord":"Fighter",
+            "Alpha":"Fighter","Julian":"Fighter/Mage",
+            // Assassin
+            "Ling":"Assassin","Lancelot":"Assassin","Gusion":"Assassin","Hayabusa":"Assassin","Fanny":"Assassin","Saber":"Assassin",
+            "Karina":"Assassin","Natalia":"Assassin","Helcurt":"Assassin","Selena":"Assassin/Mage","Benedetta":"Assassin",
+            "Aamon":"Assassin","Joy":"Assassin","Nolan":"Assassin","Hanzo":"Assassin","Kadita":"Assassin/Mage","Yi Sun-shin":"Assassin/Marksman",
+            // Mage
+            "Kagura":"Mage","Eudora":"Mage","Nana":"Mage/Support","Pharsa":"Mage","Yve":"Mage","Lunox":"Mage","Harith":"Mage",
+            "Esmeralda":"Mage/Tank","Vale":"Mage","Valir":"Mage","Gord":"Mage","Aurora":"Mage","Odette":"Mage","Cecilion":"Mage",
+            "Luo Yi":"Mage","Xavier":"Mage","Valentina":"Mage","Lylia":"Mage","Chang'e":"Mage","Vexana":"Mage","Faramis":"Mage/Support",
+            "Harley":"Mage","Cyclops":"Mage","Zhask":"Mage","Kimmy":"Mage/Marksman","Alice":"Mage","Novaria":"Mage","Zhuxin":"Mage",
+            "Obsidia":"Mage","Zetian":"Mage",
+            // Marksman
+            "Layla":"Marksman","Miya":"Marksman","Lesley":"Marksman","Wanwan":"Marksman","Beatrix":"Marksman","Brody":"Marksman",
+            "Claude":"Marksman","Granger":"Marksman","Moskov":"Marksman","Karrie":"Marksman","Irithel":"Marksman","Popol and Kupa":"Marksman",
+            "Natan":"Marksman","Melissa":"Marksman","Ixia":"Marksman","Clint":"Marksman","Bruno":"Marksman","Hanabi":"Marksman",
+            "Roger":"Marksman/Fighter",
+            // Support
+            "Angela":"Support","Rafaela":"Support","Estes":"Support","Diggie":"Support","Mathilda":"Support","Floryn":"Support",
+            "Carmilla":"Support","Kaja":"Support","Marcel":"Support/Tank","Sora":"Support/Fighter"
+        };
+
+        
+        // Hero-specific meta override (agar item kompatibel dengan skill/pasif hero)
+
+        const heroSpecificBuilds = {
+            "Claude": {
+                Gold: {
+                    items: ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Malefic Gun","Wind of Nature"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Wanwan": {
+                Gold: {
+                    items: ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Wind of Nature","Rose Gold Meteor"],
+                    emblem: "Marksman (Swift, Weapon Master, Weakness Finder)"
+                }
+            },
+            "Karrie": {
+                Gold: {
+                    items: ["Swift Boots","Demon Hunter Sword","Golden Staff","Corrosion Scythe","Wind of Nature","Rose Gold Meteor"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Irithel": {
+                Gold: {
+                    items: ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Windtalker","Malefic Roar"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Natan": {
+                Gold: {
+                    items: ["Swift Boots","Feather of Heaven","Golden Staff","Genius Wand","Holy Crystal","Divine Glaive"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                },
+                Mid: {
+                    items: ["Magic Shoes","Feather of Heaven","Golden Staff","Genius Wand","Holy Crystal","Divine Glaive"],
+                    emblem: "Mage (Rupture, Bargain Hunter, Impure Rage)"
+                }
+            },
+            "Melissa": {
+                Gold: {
+                    items: ["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Golden Staff","Wind of Nature","Malefic Roar"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Ixia": {
+                Gold: {
+                    items: ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Wind of Nature","Rose Gold Meteor"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Clint": {
+                Gold: {
+                    items: ["Tough Boots","Endless Battle","Blade of the Heptaseas","Berserker's Fury","Malefic Roar","Immortality"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Bruno": {
+                Gold: {
+                    items: ["Swift Boots","Berserker's Fury","Windtalker","Malefic Roar","Endless Battle","Immortality"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Hanabi": {
+                Gold: {
+                    items: ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Wind of Nature","Malefic Roar"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Roger": {
+                Gold: {
+                    items: ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Malefic Roar","Immortality"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                },
+                Jungle: {
+                    items: ["Tough Boots","War Axe","Hunter Strike","Demon Hunter Sword","Malefic Roar","Immortality"],
+                    emblem: "Fighter (Bravery, Seasoned Hunter, Brave Smite)"
+                }
+            },
+            "Popol and Kupa": {
+                Gold: {
+                    items: ["Swift Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Wind of Nature","Malefic Roar"],
+                    emblem: "Marksman (Swift, Weapon Master, Quantum Charge)"
+                }
+            },
+            "Mathilda": {
+                Roam: {
+                    items: ["Tough Boots","Enchanted Talisman","Dominance Ice","Oracle","Athena's Shield","Immortality"],
+                    emblem: "Support (Agility, Bargain Hunter, Focusing Mark)"
+                }
+            },
+            "Chip": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Radiant Armor","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Diggie": {
+                Roam: {
+                    items: ["Magic Shoes","Enchanted Talisman","Oracle","Athena's Shield","Radiant Armor","Immortality"],
+                    emblem: "Support (Agility, Bargain Hunter, Focusing Mark)"
+                }
+            },
+            "Estes": {
+                Roam: {
+                    items: ["Magic Shoes","Enchanted Talisman","Oracle","Dominance Ice","Athena's Shield","Immortality"],
+                    emblem: "Support (Agility, Bargain Hunter, Focusing Mark)"
+                }
+            },
+            "Angela": {
+                Roam: {
+                    items: ["Magic Shoes","Enchanted Talisman","Oracle","Dominance Ice","Athena's Shield","Immortality"],
+                    emblem: "Support (Agility, Bargain Hunter, Focusing Mark)"
+                }
+            },
+            "Floryn": {
+                Roam: {
+                    items: ["Magic Shoes","Enchanted Talisman","Oracle","Dominance Ice","Athena's Shield","Immortality"],
+                    emblem: "Support (Agility, Bargain Hunter, Focusing Mark)"
+                }
+            },
+            "Rafaela": {
+                Roam: {
+                    items: ["Magic Shoes","Enchanted Talisman","Oracle","Dominance Ice","Athena's Shield","Immortality"],
+                    emblem: "Support (Agility, Bargain Hunter, Focusing Mark)"
+                }
+            },
+            "Carmilla": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Radiant Armor","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Minotaur": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Radiant Armor","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Lolita": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Radiant Armor","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Tigreal": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Athena's Shield","Radiant Armor","Antique Cuirass","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Atlas": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Athena's Shield","Radiant Armor","Antique Cuirass","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Franco": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Athena's Shield","Radiant Armor","Antique Cuirass","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Johnson": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Athena's Shield","Radiant Armor","Antique Cuirass","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Khufra": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Athena's Shield","Radiant Armor","Antique Cuirass","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Focusing Mark)"
+                }
+            },
+            "Grock": {
+                Roam: {
+                    items: ["Tough Boots","Cursed Helmet","Dominance Ice","Oracle","Athena's Shield","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                }
+            },
+            "Belerick": {
+                Roam: {
+                    items: ["Tough Boots","Cursed Helmet","Dominance Ice","Oracle","Athena's Shield","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                }
+            },
+            "Hylos": {
+                Roam: {
+                    items: ["Tough Boots","Cursed Helmet","Dominance Ice","Oracle","Athena's Shield","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                }
+            },
+            "Uranus": {
+                EXP: {
+                    items: ["Tough Boots","Enchanted Talisman","Oracle","Dominance Ice","Athena's Shield","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                },
+                Roam: {
+                    items: ["Tough Boots","Enchanted Talisman","Oracle","Dominance Ice","Athena's Shield","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                }
+            },
+            "Akai": {
+                Roam: {
+                    items: ["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Radiant Armor","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                }
+            },
+            "Gatotkaca": {
+                EXP: {
+                    items: ["Tough Boots","Cursed Helmet","Dominance Ice","Oracle","Athena's Shield","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                },
+                Roam: {
+                    items: ["Tough Boots","Cursed Helmet","Dominance Ice","Oracle","Athena's Shield","Immortality"],
+                    emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+                }
+            },
+        
+
+"Lunox": {
+    Mid: {
+        items: ["Magic Shoes","Clock of Destiny","Holy Crystal","Divine Glaive","Blood Wings","Winter Truncheon"],
+        emblem: "Mage (Rupture, Bargain Hunter, Impure Rage)"
+    }
+},
+            "Cici": {
+    EXP: {
+        items: ["Tough Boots","War Axe","Bloodlust Axe","Hunter Strike","Brute Force Breastplate","Immortality"],
+        emblem: "Fighter (Bravery, Festival of Blood, Brave Smite)"
+    },
+    Jungle: {
+        items: ["Tough Boots","War Axe","Hunter Strike","Blade of the Heptaseas","Malefic Roar","Immortality"],
+        emblem: "Fighter (Bravery, Seasoned Hunter, Brave Smite)"
+    },
+    Mid: {
+        items: ["Warrior Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],
+        emblem: "Fighter (Bravery, Weapon Master, Lethal Ignition)"
+    },
+    Gold: {
+        items: ["Swift Boots","War Axe","Hunter Strike","Blade of Despair","Malefic Roar","Immortality"],
+        emblem: "Fighter (Bravery, Weapon Master, Lethal Ignition)"
+    },
+    Roam: {
+        items: ["Tough Boots","Dominance Ice","Oracle","Antique Cuirass","Brute Force Breastplate","Immortality"],
+        emblem: "Tank (Vitality, Tenacity, Concussive Blast)"
+    }
+},
+};
+
+
+        // Bangun data rows: 5 lane per hero
+        const lanes = ["EXP","Jungle","Mid","Gold","Roam"];
+        const allRows = [];
+
+        heroes.forEach(hero => {
+            const role = roleMap[hero] || "Fighter"; // default
+            const { builds, emblems } = generateBuild(hero, role);
+            lanes.forEach(lane => {
+                const override = heroSpecificBuilds[hero] && heroSpecificBuilds[hero][lane];
+                allRows.push({
+                    hero: hero,
+                    role: role,
+                    lane: lane,
+                    items: override ? override.items : builds[lane],
+                    emblem: override ? override.emblem : emblems[lane]
+                });
+            });
+        });
+
+
+        // DOM
+        const tbody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const laneBtns = document.querySelectorAll('.lane-btn[data-lane]');
+        const resultSpan = document.getElementById('resultCount');
+
+        let activeLane = 'all';
+        let searchTerm = '';
+
+        function renderTable() {
+            let filtered = allRows.filter(row => {
+                if (activeLane !== 'all' && row.lane !== activeLane) return false;
+                if (searchTerm.trim() !== '') {
+                    const term = searchTerm.trim().toLowerCase();
+                    return row.hero.toLowerCase().includes(term);
+                }
+                return true;
+            });
+
+            // Urutkan: hero A-Z, lalu lane
+            filtered.sort((a,b) => {
+                if (a.hero !== b.hero) return a.hero.localeCompare(b.hero);
+                const laneOrder = {EXP:1, Jungle:2, Mid:3, Gold:4, Roam:5};
+                return laneOrder[a.lane] - laneOrder[b.lane];
+            });
+
+            const uniqueHeroes = new Set(filtered.map(r => r.hero)).size;
+            resultSpan.innerHTML = `Menampilkan ${filtered.length} build (${uniqueHeroes} hero)`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:32px; color:#a0b9d0;">⚠️ Hero tidak ditemukan.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            const laneColors = {
+                EXP: '#ef4444', Jungle: '#10b981', Mid: '#8b5cf6', Gold: '#f59e0b', Roam: '#06b6d4'
+            };
+
+            filtered.forEach(row => {
+                const initial = row.hero.charAt(0).toUpperCase();
+                const itemsHtml = (row.items || []).map(it => `<span class="item-badge">${it}</span>`).join('');
+                const laneColor = laneColors[row.lane] || '#888';
+                html += `<tr>
+                    <td><div class="hero-name-cell"><span class="hero-icon">${initial}</span>${row.hero}</div></td>
+                    <td><span class="role-tag">${row.role}</span></td>
+                    <td><span class="lane-badge" style="background:${laneColor}20; color:${laneColor}; border-left:3px solid ${laneColor};">${row.lane}</span></td>
+                    <td><div class="item-list">${itemsHtml}</div></td>
+                    <td><div class="emblem-cell"><span class="emblem-main">${row.emblem}</span></div></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function setActiveLane(lane) {
+            activeLane = lane;
+            laneBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lane') === lane);
+            });
+            renderTable();
+        }
+
+        laneBtns.forEach(btn => btn.addEventListener('click', () => {
+            setActiveLane(btn.getAttribute('data-lane'));
+        }));
+
+        searchBtn.addEventListener('click', () => {
+            searchTerm = searchInput.value;
+            renderTable();
+        });
+        searchInput.addEventListener('keyup', e => { if(e.key==='Enter') { searchTerm=searchInput.value; renderTable(); } });
+        resetBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchTerm = '';
+            setActiveLane('all');
+        });
+
+        renderTable();
+    })();
+</script>
+</body>
+</html>
